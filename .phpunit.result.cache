@@ -1,0 +1,1 @@
+{"version":1,"defects":{"CommissionTest::testAdd":5,"CommonHelperTest::testCanCurrencyAmountEmpty":3},"times":{"CommissionTest::testAdd":0.002,"CommonHelperTest::testCanCurrencyAmountEmpty":0.02}}
