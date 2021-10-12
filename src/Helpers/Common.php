@@ -14,10 +14,11 @@ class Common
      */
     public function loadConfig(string $configName): array
     {
-
+        $configData = [];
         if (file_exists('src/config/' . $configName . '.php')) {
-            return require 'src/config/' . $configName . '.php';
+            $configData = require 'src/config/' . $configName . '.php';
         }
+        return $configData;
     }
 
     /**

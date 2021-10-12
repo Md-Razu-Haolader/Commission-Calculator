@@ -29,4 +29,18 @@ final class CommonHelperTest extends TestCase
         $result = is_float($res) ? true : false;
         $this->assertTrue($result);
     }
+    public function testLoadConfigWithWrongConfigName()
+    {
+        $configName = 'test';
+        $res = $this->commonHelper->loadConfig($configName);
+        $result = count($res) > 0 ? true : false;
+        $this->assertFalse($result);
+    }
+    public function testLoadConfigMustReturnArray()
+    {
+        $configName = 'common';
+        $res = $this->commonHelper->loadConfig($configName); 
+        $result = count($res) > 0 ? true : false;
+        $this->assertTrue($result);
+    }
 }
