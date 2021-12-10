@@ -1,7 +1,7 @@
-# Commission-Calculator
+# Commission-Calculator (SOLID)
 
 
-> Commission calculation from api
+> Commission calculation from api using SOLID principles.
 
 ### Composer CLI:
 ```bash
