@@ -14,22 +14,25 @@ final class CommonHelperTest extends TestCase
     {
         static::$commonHelper = new Common();
     }
+    protected function setUp(): void
+    {
+    }
 
-    public function testValidDateString()
+    public function testIsValidDateShouldReturnTrueWhenValidDateStringGiven()
     {
         $dateString = '2021-05-28';
         $format = 'Y-m-d';
         $result = static::$commonHelper->isValidDate($dateString, $format);
         $this->assertTrue($result);
     }
-    public function testFormatAmountMustReturnFloat()
+    public function testFormatAmountMustReturnFloatWhenDecimalAmountGiven()
     {
         $amount = 8.66;
         $res = static::$commonHelper->formatAmount($amount);
         $result = is_float($res) ? true : false;
         $this->assertTrue($result);
     }
-    public function testLoadConfigWithWrongConfigName()
+    public function testShouldNotLoadConfigFileWhenWrongFileGiven()
     {
         $configName = 'test';
         $res = static::$commonHelper->loadConfig($configName);
