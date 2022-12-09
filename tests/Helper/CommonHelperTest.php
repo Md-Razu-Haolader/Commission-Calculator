@@ -2,44 +2,44 @@
 
 declare(strict_types=1);
 
-use App\Helpers\Common;
 use PHPUnit\Framework\TestCase;
+use App\Helpers\Common;
 
 final class CommonHelperTest extends TestCase
 {
 
-    private $commonHelper;
+    private static $commonHelper;
 
-    public function setUp()
+    public static function setUpBeforeClass(): void
     {
-        $this->commonHelper = new Common();
+        static::$commonHelper = new Common();
     }
 
     public function testValidDateString()
     {
         $dateString = '2021-05-28';
         $format = 'Y-m-d';
-        $result = $this->commonHelper->isValidDate($dateString, $format);
+        $result = static::$commonHelper->isValidDate($dateString, $format);
         $this->assertTrue($result);
     }
     public function testFormatAmountMustReturnFloat()
     {
         $amount = 8.66;
-        $res = $this->commonHelper->formatAmount($amount);
+        $res = static::$commonHelper->formatAmount($amount);
         $result = is_float($res) ? true : false;
         $this->assertTrue($result);
     }
     public function testLoadConfigWithWrongConfigName()
     {
         $configName = 'test';
-        $res = $this->commonHelper->loadConfig($configName);
+        $res = static::$commonHelper->loadConfig($configName);
         $result = count($res) > 0 ? true : false;
         $this->assertFalse($result);
     }
     public function testLoadConfigMustReturnArray()
     {
         $configName = 'common';
-        $res = $this->commonHelper->loadConfig($configName); 
+        $res = static::$commonHelper->loadConfig($configName);
         $result = count($res) > 0 ? true : false;
         $this->assertTrue($result);
     }

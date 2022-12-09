@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Commission;
 
-use App\Services\Commission\TransactionCommission;
+use App\Services\Commission\Interfaces\Calculatable;
 use App\Facades\CommonHelper;
 use App\Services\Currency;
 
-class WithdrawCommission implements TransactionCommission
+class WithdrawCommission implements Calculatable
 {
     private $commonConfig;
 
@@ -62,19 +62,19 @@ class WithdrawCommission implements TransactionCommission
      * @return array
      */
     protected function calculateForPrivateAcc(array $transactionData): array
-    { 
+    {
         $commissions = [];
         array_walk($transactionData, function ($yearWeekData, $ywIndex) use (&$commissions, $transactionData) {
             array_walk($yearWeekData, function ($userWiseData, $usrIndex) use (&$commissions, $transactionData, $ywIndex) {
                 $totalWeeklyTransAmount = 0;
                 $weeklyTransCount = 1;
-                array_walk($userWiseData, function ($item, $index) use (&$commissions, &$totalWeeklyTransAmount, &$weeklyTransCount, $transactionData, $ywIndex ) {
+                array_walk($userWiseData, function ($item, $index) use (&$commissions, &$totalWeeklyTransAmount, &$weeklyTransCount, $transactionData, $ywIndex) {
                     // convert currency to EUR and assign to transaction array
                     $item[6] = $this->currency->convertToEur((float)$item[4], $item[5]);
 
                     list($transactionDate, $userId, $accType, $transactionType, $transactionAmount, $currencyType, $amountInEuro) = array_map('trim', $item);
                     $isCommissionAble = false;
-                    
+
                     $totalWeeklyTransAmount += $amountInEuro;
 
                     $commissionAmount = 0;

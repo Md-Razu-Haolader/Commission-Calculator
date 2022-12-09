@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services\Commission;
 
 use App\Repositories\DataRepository;
-use App\Services\Commission\TransactionFactory;
-use App\Request\Validator\BaseValidator;
+use App\Factories\TransactionFactory;
+use App\Request\Validator\CommissionValidator;
 
 class CommissionCalculator
 {
@@ -20,20 +20,15 @@ class CommissionCalculator
      * @return array
      */
     public function processCommission(): array
-    { 
+    {
         $commissionData = [];
         $weekWiseTransactionData = $this->repository->getWeekWiseTransactionData();
         if (count($weekWiseTransactionData) > 0) {
             $transactionFactory = new TransactionFactory();
             array_walk($weekWiseTransactionData, function ($item, $transactionType) use (&$commissionData, $transactionFactory) {
-                try { 
-                    // calculation logic for deposit and withdrawal
-                    $transaction = $transactionFactory->init($transactionType);
-                    $commissionData = $commissionData + $transaction->calculate($item);
-                } catch (\Exception $exception) {
-                    
-                }
-                
+                // calculation logic for deposit and withdrawal
+                $transFactory = $transactionFactory->create($transactionType);
+                $commissionData = $commissionData + $transFactory->calculate($item);
             });
         }
         ksort($commissionData);
@@ -45,18 +40,14 @@ class CommissionCalculator
      *
      * @return void
      */
-    public function calculate(BaseValidator $commissionValidator): void
+    public function calculate(): void
     {
         global $argv;
         $filePath = isset($argv[1]) && !empty($argv[1]) ? $argv[1] : '';
-        $csvValidate = $commissionValidator->validate($filePath);
-        if ($csvValidate['result'] === true) {
-            $commissionData = $this->processCommission();
-            if (count($commissionData) > 0) {
-                echo implode("\n", $commissionData);
-            }
-        } else {
-            echo $csvValidate['msg'];
+        (new CommissionValidator())->validate($filePath);
+        $commissionData = $this->processCommission();
+        if (count($commissionData) > 0) {
+            echo implode("\n", $commissionData);
         }
     }
 }

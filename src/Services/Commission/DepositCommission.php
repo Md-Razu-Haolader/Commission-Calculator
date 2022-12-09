@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Services\Commission;
 
-use App\Services\Commission\TransactionCommission;
+use App\Services\Commission\Interfaces\Calculatable;
 use App\Facades\CommonHelper;
 use App\Services\Currency;
 
-class DepositCommission implements TransactionCommission
+class DepositCommission implements Calculatable
 {
 
     private $commonConfig;
@@ -24,7 +24,7 @@ class DepositCommission implements TransactionCommission
      * @return array
      */
     public function calculate(array $transactionData): array
-    { 
+    {
         $commissionsData = [];
         array_walk($transactionData, function ($accTypeData, $accIndex) use (&$commissionsData) {
             array_walk($accTypeData, function ($yearWeekData, $ywIndex) use (&$commissionsData) {
